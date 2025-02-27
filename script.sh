@@ -99,7 +99,7 @@ default:
     vmguests: False
     datastores: False
     hosts: True
-	  snapshots: False
+    snapshots: False
 EOF
 
 echo "🔧 Creating vmware_exporter systemd service..."

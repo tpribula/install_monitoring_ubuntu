@@ -1,9 +1,15 @@
 #!/bin/bash
 
-set -e  # Exit on error
+set -e
+set -u
 
 # Detect Ubuntu machine's IP address
 IP_ADDRESS=$(hostname -I | awk '{print $1}')
+
+# VMware vSphere Credentials (Set These Before Running)
+VSPHERE_HOST="your-vcenter-ip-or-hostname"
+VSPHERE_USER="administrator@vsphere.local"
+VSPHERE_PASSWORD="yourpassword"
 
 echo "🚀 Detected machine IP address: $IP_ADDRESS"
 
@@ -86,9 +92,9 @@ echo "🔧 Creating vmware_exporter configuration..."
 sudo mkdir -p /opt/vmware_exporter
 sudo cat <<EOF | sudo tee /opt/vmware_exporter/config.yml > /dev/null
 default:
-  vsphere_host: "your-vcenter-ip-or-hostname"
-  vsphere_user: "administrator@vsphere.local"
-  vsphere_password: "yourpassword"
+  vsphere_host: "$VSPHERE_HOST"
+  vsphere_user: "$VSPHERE_USER"
+  vsphere_password: "$VSPHERE_PASSWORD"
   ignore_ssl: True
   specs_size: 5000
   fetch_custom_attributes: False
@@ -113,7 +119,6 @@ Type=simple
 User=vmware
 Group=vmware
 ExecStart=/usr/local/bin/vmware_exporter -c /opt/vmware_exporter/config.yml
-Restart=always
 WorkingDirectory=/opt/vmware_exporter
 
 [Install]

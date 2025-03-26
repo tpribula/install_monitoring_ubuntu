@@ -8,8 +8,10 @@ IP_ADDRESS=$(hostname -I | awk '{print $1}')
 
 # VMware vSphere Credentials (Set These Before Running)
 VSPHERE_HOST="your-vcenter-ip-or-hostname"
-VSPHERE_USER="administrator@vsphere.local"
-VSPHERE_PASSWORD="yourpassword"
+VSPHERE_USER="vsphere-username"
+VSPHERE_PASSWORD="your-password"
+EMAIL_ADDRESS="your-email-address"
+EMAIL_PASSWORD="your-password"
 
 echo "🚀 Detected machine IP address: $IP_ADDRESS"
 
@@ -74,6 +76,20 @@ sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
 sudo apt update
 sudo apt install -y grafana
 
+sudo tee -a /etc/grafana/grafana.ini > /dev/null <<EOL
+
+#################################### SMTP Configuration ######################
+[smtp]
+enabled = true
+host = smtp.gmail.com:587
+user = $EMAIL_ADDRESS
+password = "$EMAIL_PASSWORD"
+from_address = $EMAIL_ADDRESS
+from_name = Grafana Alerts
+ehlo_identity = grafana.local
+startTLS_policy = OpportunisticStartTLS
+EOF
+
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
 
@@ -136,5 +152,5 @@ echo "✅ VMware Exporter Installed & Running!"
 # -------------------------------
 echo "🎉 All services are installed and running!"
 echo "🔹 Prometheus → http://$IP_ADDRESS:9090"
-echo "🔹 Grafana → http://$IP_ADDRESS:3000 (admin/admin)"
+echo "🔹 Grafana → http://$IP_ADDRESS:3000 (admin/admin - first login)"
 echo "🔹 VMware Exporter Metrics → http://$IP_ADDRESS:9272/metrics"

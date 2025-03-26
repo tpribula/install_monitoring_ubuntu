@@ -76,7 +76,7 @@ sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
 sudo apt update
 sudo apt install -y grafana
 
-sudo tee -a /etc/grafana/grafana.ini > /dev/null <<EOL
+sudo tee -a /etc/grafana/grafana.ini > /dev/null <<EOF
 
 #################################### SMTP Configuration ######################
 [smtp]

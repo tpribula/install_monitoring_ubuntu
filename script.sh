@@ -118,10 +118,10 @@ default:
   fetch_alarms: False
   collect_only:
     vms: True
-    vmguests: False
-    datastores: False
+    vmguests: True
+    datastores: True
     hosts: True
-    snapshots: False
+    snapshots: True
 EOF
 
 echo "🔧 Creating vmware_exporter systemd service..."
